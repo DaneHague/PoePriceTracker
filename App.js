@@ -1,13 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import ItemDisplay from "./Features/ItemDisplay";
+import {Button, StyleSheet, Text, View} from 'react-native';
+import ItemDisplay from "./Features/ItemDisplay/ItemDisplay";
 
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text>This is going to be an app to track PoE prices</Text>
-        <ItemDisplay />
+      <Button title={'test'}>Press me</Button>
+      <ItemDisplay itemName={'Mageblood'} />
+      <ItemDisplay itemName={'Headhunter'} />
       <StatusBar style="auto" />
     </View>
   );
