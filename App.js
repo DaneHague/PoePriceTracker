@@ -1,14 +1,25 @@
 import { StatusBar } from 'expo-status-bar';
 import {Button, StyleSheet, Text, View} from 'react-native';
 import ItemDisplay from "./Features/ItemDisplay/ItemDisplay";
+import Dropdown from "./Features/Dropdown/Dropdown";
+import React, {useState} from "react";
 
 
 export default function App() {
+
+  const [selectedItem, setSelectedItem] = useState(null);
+
+  const handleSelect = (item) => {
+    setSelectedItem(item);
+  };
+  
   return (
     <View style={styles.container}>
-      <Button title={'test'}>Press me</Button>
-      <ItemDisplay itemName={'Mageblood'} />
-      <ItemDisplay itemName={'Headhunter'} />
+      <Dropdown onSelect={handleSelect} />
+      {selectedItem === 'MageBlood' && <ItemDisplay itemName={'Mageblood'} />}
+      {selectedItem === 'Headhunter' && <ItemDisplay itemName={'Headhunter'} />}
+      {/**/}
+      {/*<ItemDisplay itemName={'Headhunter'} />*/}
       <StatusBar style="auto" />
     </View>
   );
@@ -17,8 +28,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: '#000000',
+    paddingTop: 50,
   },
 });

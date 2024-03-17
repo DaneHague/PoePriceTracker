@@ -14,7 +14,7 @@ const ItemDisplay = ({ itemName }) => {
             setIsLoading(true);
             setError('');
             try {
-                const data = await getResource(itemName, '2024-03-15', '2024-03-16');
+                const data = await getResource(itemName, '2024-03-16', '2024-03-17');
                 setItems(Array.isArray(data) ? data : [data]);
                 console.log('Data:', data);
             } catch (error) {

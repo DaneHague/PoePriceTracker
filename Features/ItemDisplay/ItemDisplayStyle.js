@@ -21,5 +21,6 @@ export default StyleSheet.create({
         textAlign: 'center',
         padding: 16,
         width: '100%',
+        color: 'white',
     },
 });

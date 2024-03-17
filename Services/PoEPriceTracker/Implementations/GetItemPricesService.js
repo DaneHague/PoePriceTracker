@@ -1,9 +1,10 @@
-const BASE_URL = 'https://poe-functions-test.azurewebsites.net/api/GetItemPrices/';
+const BASE_URL = 'https://poe-functions-test.azurewebsites.net/api';
 
 
 const fetchResource = async (endpoint, options = {}) => {
   try {
-    const response = await fetch(`${BASE_URL}${endpoint}`, options);
+    console.log(`${BASE_URL}/GetItemPrices/${endpoint}`);
+    const response = await fetch(`${BASE_URL}/${endpoint}`, options);
     const data = await response.json();
     return data;
   } catch (error) { 
@@ -13,5 +14,9 @@ const fetchResource = async (endpoint, options = {}) => {
 };
 
 export const getResource = async (itemName, dateFrom, dateTo) => {
-  return await fetchResource(`/${itemName}/${dateFrom}/${dateTo}`);
+  return await fetchResource(`GetItemPrices/${itemName}/${dateFrom}/${dateTo}`);
 };
+
+export const getItems = async () => {
+    return await fetchResource('GetItems');
+}
