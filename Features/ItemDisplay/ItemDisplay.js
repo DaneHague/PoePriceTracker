@@ -4,7 +4,7 @@ import { LineChart } from 'react-native-chart-kit';
 import { getResource } from '../../Services/PoEPriceTracker/Implementations/GetItemPricesService';
 import styles from './ItemDisplayStyle';
 
-const ItemDisplay = ({ itemName }) => {
+const ItemDisplay = ({ itemName, currency }) => {
     const [items, setItems] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState('');
@@ -14,15 +14,16 @@ const ItemDisplay = ({ itemName }) => {
             setIsLoading(true);
             setError('');
             const dateTo = new Date();
+            dateTo.setHours(23, 59, 59, 0);
             const dateFrom = new Date();
             dateFrom.setDate(dateTo.getDate() - 1);
+            dateFrom.setHours(0, 0, 0, 0);
 
-            const formatDate = (date) => date.toISOString().split('T')[0];
-            
+            const formatDate = (date) => date.toISOString();
+
             try {
-                const data = await getResource(itemName, formatDate(dateFrom), formatDate(dateTo));
+                const data = await getResource(itemName, formatDate(dateFrom), formatDate(dateTo), currency);
                 setItems(Array.isArray(data) ? data : [data]);
-                console.log('Data:', data);
             } catch (error) {
                 console.error('Error fetching data:', error);
                 setError('Failed to fetch data. Please try again later.');
@@ -32,7 +33,7 @@ const ItemDisplay = ({ itemName }) => {
         };
 
         fetchData();
-    }, [itemName]);
+    }, [itemName, currency]);
 
     const sortedItems = items.sort((a, b) =>
         new Date(a.timeRecorded).getTime() - new Date(b.timeRecorded).getTime()
@@ -65,7 +66,7 @@ const ItemDisplay = ({ itemName }) => {
                         data={chartData}
                         width={Dimensions.get('window').width}
                         height={250}
-                        yAxisLabel="D"
+                        yAxisLabel={"D"}
                         chartConfig={{
                             backgroundColor: '#e26a00',
                             backgroundGradientFrom: '#fb8c00',
