@@ -13,8 +13,14 @@ const ItemDisplay = ({ itemName }) => {
         const fetchData = async () => {
             setIsLoading(true);
             setError('');
+            const dateTo = new Date();
+            const dateFrom = new Date();
+            dateFrom.setDate(dateTo.getDate() - 1);
+
+            const formatDate = (date) => date.toISOString().split('T')[0];
+            
             try {
-                const data = await getResource(itemName, '2024-03-16', '2024-03-17');
+                const data = await getResource(itemName, formatDate(dateFrom), formatDate(dateTo));
                 setItems(Array.isArray(data) ? data : [data]);
                 console.log('Data:', data);
             } catch (error) {
