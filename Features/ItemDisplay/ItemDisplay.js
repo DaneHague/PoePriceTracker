@@ -4,7 +4,8 @@ import { LineChart } from 'react-native-chart-kit';
 import { getResource } from '../../Services/PoEPriceTracker/Implementations/GetItemPricesService';
 import styles from './ItemDisplayStyle';
 
-const ItemDisplay = ({ itemName, currency }) => {
+
+const ItemDisplay = ({ itemName, currency, startDate, endDate }) => {
     const [items, setItems] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState('');
@@ -13,27 +14,22 @@ const ItemDisplay = ({ itemName, currency }) => {
         const fetchData = async () => {
             setIsLoading(true);
             setError('');
-            const dateTo = new Date();
-            dateTo.setHours(23, 59, 59, 0);
-            const dateFrom = new Date();
-            dateFrom.setDate(dateTo.getDate() - 1);
-            dateFrom.setHours(0, 0, 0, 0);
 
             const formatDate = (date) => date.toISOString();
 
             try {
-                const data = await getResource(itemName, formatDate(dateFrom), formatDate(dateTo), currency);
+                const data = await getResource(itemName, formatDate(startDate), formatDate(endDate), currency);
                 setItems(Array.isArray(data) ? data : [data]);
             } catch (error) {
                 console.error('Error fetching data:', error);
-                setError('Failed to fetch data. Please try again later.');
+                setError('Failed to fetch data. Please try a different search.');
             } finally {
                 setIsLoading(false);
             }
         };
 
         fetchData();
-    }, [itemName, currency]);
+    }, [itemName, currency, startDate, endDate]);
 
     const sortedItems = items.sort((a, b) =>
         new Date(a.timeRecorded).getTime() - new Date(b.timeRecorded).getTime()
@@ -46,7 +42,8 @@ const ItemDisplay = ({ itemName, currency }) => {
     
     const chartData = {
         labels: sortedItems.map(item =>
-            `${new Date(item.timeRecorded).getHours()}h`
+            // Get date and time
+            `${new Date(item.timeRecorded).getDate()}/${new Date(item.timeRecorded).getHours()}h`
         ),
         datasets: [{
             data: sortedItems.map(item => item.price),
@@ -61,7 +58,7 @@ const ItemDisplay = ({ itemName, currency }) => {
                 <Text style={styles.errorText}>{error}</Text>
             ) : (
                 <>
-                    <Text style={styles.chartTitle}>{itemName} 24h</Text>
+                    <Text style={styles.chartTitle}>{itemName}</Text>
                     <LineChart
                         data={chartData}
                         width={Dimensions.get('window').width}

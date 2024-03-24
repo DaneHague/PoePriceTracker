@@ -10,7 +10,7 @@ const CurrencyDropdown = ({ onSelect }) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const data = ["divine", "vaal", "chaos"];
+                const data = ["Divine", "Vaal", "Chaos"];
                 const formattedData = data.map(currency => ({ label: currency, value: currency }));
                 setCurrencies(formattedData);
             } catch (error) {
